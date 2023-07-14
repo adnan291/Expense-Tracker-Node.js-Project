@@ -16,10 +16,10 @@ app.use('/user', signupRoutes);
 
 sequelize.sync().then((result) => {
     app.listen(4000);
-    console.log("app is running");
 }).catch((err) => {
     console.log(err);
 });
+
 
 app.use((req, res, next) => {
     res.status(404).send('<h1>Page Not Found</h1>')

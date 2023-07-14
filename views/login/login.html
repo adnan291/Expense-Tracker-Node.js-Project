@@ -8,8 +8,9 @@
   </head>
   <body>
     <div class="container">
-        <form class="form-container" action="loginForm.php" method="post">
+        <form class="form-container" onsubmit="login(event)" method="post">
         <h2>Login</h2>
+        <div class="msg"></div>
         <input type="email" name="email" id="password" placeholder="Email Address" />
         <input type="password" name="password" id="password" placeholder="Password" />
         <p><a href="forgotPass.php">Forgot Password?</a></p>

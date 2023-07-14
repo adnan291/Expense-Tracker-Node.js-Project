@@ -14,18 +14,23 @@ async function signup(event) {
       }
   
       const res = await axios.post("http://localhost:4000/user/signup", obj);
-      console.log(res.data);
 
-      if(res.status === 200){
+      if(res.data.alreadyexisting == true){
         msg.innerHTML = '<h4>User Already Exist<h4>';
 
-    setTimeout(() => {
-      msg.innerHTML = '';
-    }, 2000);
+          setTimeout(() => {
+            msg.innerHTML = '';
+          }, 2000);
       }
       else{
-        window.location.href="../login/login.html"  
-        console.log('login')
+
+        msg.innerHTML = '<h4>Registration Successfull<h4>';
+        event.target.name.value = '';
+        event.target.email.value = '';
+        event.target.password.value = '';
+        setTimeout(() => {
+          msg.innerHTML = '';
+        }, 2000);  
 
       }
   
