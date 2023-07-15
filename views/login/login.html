@@ -4,17 +4,27 @@
     <title>Home</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="container">
-        <form class="form-container" onsubmit="login(event)" method="post">
+      <form class="form-container" onsubmit="login(event)" method="post">
         <h2>Login</h2>
         <div class="msg"></div>
-        <input type="email" name="email" id="password" placeholder="Email Address" />
-        <input type="password" name="password" id="password" placeholder="Password" />
+        <input
+          type="email"
+          name="email"
+          id="email"
+          placeholder="Email Address"
+        />
+        <input
+          type="password"
+          name="password"
+          id="password"
+          placeholder="Password"
+        />
         <p><a href="forgotPass.php">Forgot Password?</a></p>
-        <button type="submit" name="submit" >Login</button>
+        <button type="submit" name="submit">Login</button>
       </form>
       <p class="not-memeber">
         Not a member?
@@ -23,6 +33,6 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
-   <script src="login.js"></script>
+    <script src="login.js"></script>
   </body>
 </html>

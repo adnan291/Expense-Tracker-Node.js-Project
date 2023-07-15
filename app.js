@@ -4,14 +4,14 @@ const cors = require('cors');
 
 
 const app = express();
-const signupRoutes = require('./routes/signup');
+const signupRoutes = require('./routes/user');
 
 app.use(bodyParser.json({ extended: false }));
 app.use(cors());
 
 
 const sequelize = require('./util/database');
- 
+
 app.use('/user', signupRoutes);
 
 sequelize.sync().then((result) => {
