@@ -21,6 +21,7 @@ async function signup(event) {
           setTimeout(() => {
             msg.innerHTML = '';
           }, 2000);
+          
       }
       else{
 
@@ -30,8 +31,8 @@ async function signup(event) {
         event.target.password.value = '';
         setTimeout(() => {
           msg.innerHTML = '';
-        }, 2000);  
-
+        }, 2000).then(window.location.href="../login/login.html");  
+        
       }
   
   

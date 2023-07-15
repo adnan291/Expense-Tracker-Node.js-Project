@@ -11,10 +11,11 @@ async function login(event) {
       password
     }
 
-    const res = await axios.post("http://localhost:4000/user/login", obj)
-    console.log(res.status);
+    const res = await axios.post("http://localhost:4000/user/login", obj);
+    
     if (res.status == 200) {
       window.alert("User Logged In Successfully");
+      (window.location.href="../expense/expense.html"); 
     }
 
     event.target.email.value = '';
@@ -22,11 +23,13 @@ async function login(event) {
 
   }
   catch (err) {
-    // console.log(err.message);
-    if (err.response.status == 401) {
+    if (err.response.status == 400) {
       window.alert("Password is Incorrect");
-    } else {
+    } 
+   else if (err.response.status == 404) {
       window.alert("User Not Registered");
+    } else {
+      window.alert("Something went wrong");
     }
   }
 }

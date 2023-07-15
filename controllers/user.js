@@ -26,13 +26,14 @@ exports.signupUser = (async (req, res, next) => {
       res.json({ alreadyexisting: true });
     }
   } catch (err) {
-    console.log(err)
+    res.status(500).json({ message : "Something went wrong" });
+    // console.log(err)
   }
 });
 
 exports.loginUser = (async (req, res, next) => {
   const email = req.body.email
-  const password = req.body.password;
+  const password = req.body.password; 
 
 
   try {
@@ -41,27 +42,32 @@ exports.loginUser = (async (req, res, next) => {
 
 
     if (user.length !== 0) {
-bcrypt.compare(password, user[0].password, (err, response) => {
-  if (!err) {
-    // res.json({success: true });
-    res.status(200).send();
 
-  } else {
-    // res.json({ password: "incorrect" });
-    res.status(401).send();
+bcrypt.compare(password, user[0].password, (err, response) => {
+
+  if(response){
+    res.status(200).json({message : "User logged in successfull"});
+    
+  }
+  else if(!err) {
+    res.status(400).json({message : "Password is incorrect"});
+    
+  }
+  else {
+    throw new Error ({message : "Something went wrong"});
 
   }
 })
      
     } else {
-      // res.json({ success: false });
-      res.status(404).send();
+      res.status(404).json({message : "User is not registered"});
 
     }
 
   }
   catch (error) {
-    console.log(error)
+    res.status(500).json({message : "Something went wrong"});
+    
   }
 
 })
