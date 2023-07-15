@@ -22,7 +22,7 @@ async function login(event) {
 
   }
   catch (err) {
-    console.log(err.message);
+    // console.log(err.message);
     if (err.response.status == 401) {
       window.alert("Password is Incorrect");
     } else {

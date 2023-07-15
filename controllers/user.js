@@ -1,6 +1,7 @@
 const User = require("../models/users");
+const bcrypt = require('bcrypt');
 
-exports.postAddUser = (async (req, res, next) => {
+exports.signupUser = (async (req, res, next) => {
   const name = req.body.name;
   const email = req.body.email;
   const password = req.body.password;
@@ -8,13 +9,17 @@ exports.postAddUser = (async (req, res, next) => {
   try {
     const response = await User.findAll({ where: { email: email } });
     // console.log(response);
+
     if (response.length === 0) {
+    bcrypt.hash(password, 10, async(err,hash) => {
       await User.create({
         name: name,
         email: email,
-        password: password,
+        password: hash,
 
       });
+    });
+     
       res.json({ alreadyexisting: false });
     }
     else {
@@ -25,28 +30,29 @@ exports.postAddUser = (async (req, res, next) => {
   }
 });
 
-exports.postLoginUser = (async (req, res, next) => {
+exports.loginUser = (async (req, res, next) => {
   const email = req.body.email
   const password = req.body.password;
 
 
   try {
 
-    const res1 = await User.findAll({ where: { email: email } });
+    const user = await User.findAll({ where: { email: email } });
 
 
-    if (res1.length !== 0) {
-      const res2 = await User.findAll({ where: { email: email, password: password } });
+    if (user.length !== 0) {
+bcrypt.compare(password, user[0].password, (err, response) => {
+  if (!err) {
+    // res.json({success: true });
+    res.status(200).send();
 
-      if (res2.length !== 0) {
-        // res.json({success: true });
-        res.status(200).send();
+  } else {
+    // res.json({ password: "incorrect" });
+    res.status(401).send();
 
-      } else {
-        // res.json({ password: "incorrect" });
-        res.status(401).send();
-
-      }
+  }
+})
+     
     } else {
       // res.json({ success: false });
       res.status(404).send();
