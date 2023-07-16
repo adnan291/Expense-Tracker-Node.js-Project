@@ -1,3 +1,4 @@
+const token = localStorage.getItem("token");
 async function saveToDatabase(event) {  
  
     const msg = document.querySelector('.msg');
@@ -14,7 +15,7 @@ async function saveToDatabase(event) {
         category
       }
   
-    const res =  await axios.post("http://localhost:4000/expense/add-expense",obj);
+    const res =  await axios.post("http://localhost:4000/expense/add-expense",obj,{headers:{'Authorization':token}});
   
         showNewExpenseOnScreen(res.data);
   
@@ -47,7 +48,8 @@ async function saveToDatabase(event) {
   
    window.addEventListener("DOMContentLoaded", async () => {
     try{
-     const res = await axios.get("http://localhost:4000/expense/get-expense");
+
+     const res = await axios.get("http://localhost:4000/expense/get-expense",{headers:{'Authorization':token}});
   
       for(var i=0;i<res.data.length; i++){
       showNewExpenseOnScreen(res.data[i]);
@@ -72,7 +74,7 @@ async function saveToDatabase(event) {
   
   async function deleteExpense(expenseId) {
     try{
-         await axios.delete(`http://localhost:4000/expense/delete-expense/${expenseId}`);
+         await axios.delete(`http://localhost:4000/expense/delete-expense/${expenseId}`,{headers:{'Authorization':token}});
   
           removeExpenseFromScreen(expenseId);
   

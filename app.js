@@ -12,9 +12,14 @@ app.use(cors());
 
 
 const sequelize = require('./util/database');
+const User = require('./models/users');
+const Expense = require('./models/expenses');
 
 app.use('/user', signupRoutes);
 app.use('/expense', expenseRoutes);
+
+User.hasMany(Expense);
+Expense.belongsTo(User);
 
 sequelize.sync().then((result) => {
     app.listen(4000);
