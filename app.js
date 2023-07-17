@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const buyPremium = require('./routes/purchase')
 
 
 const app = express();
@@ -14,12 +15,17 @@ app.use(cors());
 const sequelize = require('./util/database');
 const User = require('./models/users');
 const Expense = require('./models/expenses');
+const Order = require('./models/orders')
 
 app.use('/user', signupRoutes);
 app.use('/expense', expenseRoutes);
+app.use("/purchase", buyPremium);
 
 User.hasMany(Expense);
 Expense.belongsTo(User);
+
+User.hasMany(Order);
+Order.belongsTo(User);
 
 sequelize.sync().then((result) => {
     app.listen(4000);
