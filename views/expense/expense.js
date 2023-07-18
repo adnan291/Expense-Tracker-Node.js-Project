@@ -51,6 +51,7 @@ async function saveToDatabase(event) {
      const inputElement = document.createElement('button')
    
      //inputElement.type = "button";
+     inputElement.classList = "btn leaderboard";
      inputElement.textContent = "Show Leaderboard";
      document.getElementById("leaderboard").appendChild(inputElement);
      inputElement.onclick =  async () => {
@@ -58,7 +59,7 @@ async function saveToDatabase(event) {
        const userLeaderBoardArray = await axios.get("http://localhost:4000/premium/showLeaderboard",{ headers: { Authorization: token } }
        )
        //console.log("userLeader->>",userLeaderBoardArray);
-       console.log("showLeaderBoard-->>");
+      //  console.log("showLeaderBoard-->>");
        var leaderboardElem = document.getElementById("leaderboard")
        leaderboardElem.innerHTML += `<h1>Leader Board<h1>`
        userLeaderBoardArray.data.forEach((userDetails) => {
@@ -96,7 +97,7 @@ async function saveToDatabase(event) {
      // console.log('decodeToken-->',decodeToken)
     
       const ispremiumuser = decodeToken.ispremiumuser;
-      console.log(ispremiumuser);
+      // console.log(ispremiumuser);
       if(ispremiumuser){
         showPremiumMessage();
         showLeaderboard();
