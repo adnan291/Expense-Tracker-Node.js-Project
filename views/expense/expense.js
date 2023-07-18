@@ -45,9 +45,63 @@ async function saveToDatabase(event) {
   
      parentNode.innerHTML = parentNode.innerHTML + childHTML;
    }
+
+   function showLeaderboard() {
+    // console.log('ssha')
+     const inputElement = document.createElement('button')
+   
+     //inputElement.type = "button";
+     inputElement.textContent = "Show Leaderboard";
+     document.getElementById("leaderboard").appendChild(inputElement);
+     inputElement.onclick =  async () => {
+      // const token = localStorage.getItem("token");
+       const userLeaderBoardArray = await axios.get("http://localhost:4000/premium/showLeaderboard",{ headers: { Authorization: token } }
+       )
+       //console.log("userLeader->>",userLeaderBoardArray);
+       console.log("showLeaderBoard-->>");
+       var leaderboardElem = document.getElementById("leaderboard")
+       leaderboardElem.innerHTML += `<h1>Leader Board<h1>`
+       userLeaderBoardArray.data.forEach((userDetails) => {
+         leaderboardElem.innerHTML += `<li> Name -  ${userDetails.name} Total Expense - ${userDetails.total_cost} </li>`;
+       })
+   
+     };
+   }
+
+   function showPremiumMessage() {
+     document.getElementById("goPremiumBtn").style.visibility = "hidden";
+     document.getElementById("message").innerHTML = "You are a premium user";
+   //  const child = document.getElementById("goPremiumBtn")
+   //   const parent = document.getElementById("message") 
+   //   parent.removeChild(child)
+   }
+
+   function parseJwt (token) {
+       var base64Url = token.split('.')[1];
+       var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+       var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+           return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+       }).join(''));
+   
+       return JSON.parse(jsonPayload);
+   }
+   
   
    window.addEventListener("DOMContentLoaded", async () => {
     try{
+
+      const isadmin = localStorage.getItem('isadmin')
+      const decodeToken = parseJwt(token)
+    
+     // console.log('decodeToken-->',decodeToken)
+    
+      const ispremiumuser = decodeToken.ispremiumuser;
+      console.log(ispremiumuser);
+      if(ispremiumuser){
+        showPremiumMessage();
+        showLeaderboard();
+    
+      }
 
      const res = await axios.get("http://localhost:4000/expense/get-expense",{headers:{'Authorization':token}});
   
@@ -106,19 +160,21 @@ async function saveToDatabase(event) {
           "contact": "9999999999",
         },
     
-        handler: async function (response) {
-          await axios
-            .post(
-              "http://localhost:4000/purchase/updateTransactonStatus",
-              {
+        "handler": 
+        async function (response) { 
+          await axios.post("http://localhost:3000/purchase/updateTransactonStatus",{
                 order_id: options.order_id,
                 payment_id: response.razorpay_payment_id,
               },
               { headers: { Authorization: token } }
             )
-            .then(() => {
               alert("You are a Premiem User Now");
-            });
+
+              document.getElementById("goPremiumBtn").style.visibility = "hidden";
+              document.getElementById("message").innerHTML = "You are a premium user";
+              console.log("pp user");
+              localStorage.setItem('isadmin', true)
+              showLeaderboard();
         },
       };
     

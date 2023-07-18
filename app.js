@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const buyPremium = require('./routes/purchase')
+const buyPremium = require('./routes/purchase');
+const premiumRoutes = require('./routes/premiumFeature')
 
 
 const app = express();
@@ -20,6 +21,7 @@ const Order = require('./models/orders')
 app.use('/user', signupRoutes);
 app.use('/expense', expenseRoutes);
 app.use("/purchase", buyPremium);
+app.use("/premium", premiumRoutes);
 
 User.hasMany(Expense);
 Expense.belongsTo(User);
