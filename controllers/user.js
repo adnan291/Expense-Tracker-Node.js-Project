@@ -75,4 +75,4 @@ bcrypt.compare(password, user[0].password, (err, response) => {
     
   }
 
-})
+});

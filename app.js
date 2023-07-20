@@ -6,8 +6,9 @@ const premiumRoutes = require('./routes/premiumFeature')
 
 
 const app = express();
-const signupRoutes = require('./routes/user');
+const userRoutes = require('./routes/user');
 const expenseRoutes = require('./routes/expense');
+const forgotpassRoutes = require('./routes/forgotpassword');
 
 app.use(bodyParser.json({ extended: false }));
 app.use(cors());
@@ -18,7 +19,8 @@ const User = require('./models/users');
 const Expense = require('./models/expenses');
 const Order = require('./models/orders')
 
-app.use('/user', signupRoutes);
+app.use('/user', userRoutes);
+app.use('/password',forgotpassRoutes);
 app.use('/expense', expenseRoutes);
 app.use("/purchase", buyPremium);
 app.use("/premium", premiumRoutes);
