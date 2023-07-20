@@ -1,4 +1,5 @@
 const Expense = require('../models/expenses');
+const User = require('../models/users');
  
 exports.getAddExpense =( async (req,res,next)=>{
 
@@ -20,7 +21,12 @@ exports.postAddExpense=( async (req,res,next) => {
         expenseAmount : expenseAmount,
         category : category,
         description : description
-    })
+    });
+
+    const user = await User.findByPk(req.user.id);
+    user.total_expense = user.total_expense + parseFloat(expenseAmount);
+    await user.save();
+
      res.json(data);
      }
 
@@ -37,7 +43,13 @@ exports.postDeleteExpense=( async (req, res,  next) => {
 
      try {
            const expenseId = req.params.id;
-   const data = await Expense.destroy({ where: {id:expenseId}});
+           
+           const user = await User.findByPk(req.user.id);
+           const expense = await Expense.findByPk(expenseId);
+           user.total_expense = user.total_expense - parseFloat(expense.expenseAmount);
+           await user.save();
+
+      const data = await Expense.destroy({ where: {id:expenseId}});
       res.sendStatus(200); 
     } 
      catch(err){

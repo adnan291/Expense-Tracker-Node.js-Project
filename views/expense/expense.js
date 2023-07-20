@@ -63,7 +63,7 @@ async function saveToDatabase(event) {
        var leaderboardElem = document.getElementById("leaderboard")
        leaderboardElem.innerHTML += `<h1>Leader Board<h1>`
        userLeaderBoardArray.data.forEach((userDetails) => {
-         leaderboardElem.innerHTML += `<li> Name -  ${userDetails.name} Total Expense - ${userDetails.total_cost} </li>`;
+         leaderboardElem.innerHTML += `<li> Name -  ${userDetails.name} Total Expense - ${userDetails.total_expense} </li>`;
        })
    
      };
@@ -163,7 +163,7 @@ async function saveToDatabase(event) {
     
         "handler": 
         async function (response) { 
-          await axios.post("http://localhost:3000/purchase/updateTransactonStatus",{
+          await axios.post("http://localhost:4000/purchase/updateTransactonStatus",{
                 order_id: options.order_id,
                 payment_id: response.razorpay_payment_id,
               },
