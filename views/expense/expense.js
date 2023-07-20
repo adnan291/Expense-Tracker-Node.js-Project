@@ -47,34 +47,48 @@ async function saveToDatabase(event) {
    }
 
    function showLeaderboard() {
-    // console.log('ssha')
-     const inputElement = document.createElement('button')
-   
-     //inputElement.type = "button";
-     inputElement.classList = "btn leaderboard";
-     inputElement.textContent = "Show Leaderboard";
-     document.getElementById("leaderboard").appendChild(inputElement);
-     inputElement.onclick =  async () => {
-      // const token = localStorage.getItem("token");
-       const userLeaderBoardArray = await axios.get("http://localhost:4000/premium/showLeaderboard",{ headers: { Authorization: token } }
-       )
-       //console.log("userLeader->>",userLeaderBoardArray);
-      //  console.log("showLeaderBoard-->>");
-       var leaderboardElem = document.getElementById("leaderboard")
-       leaderboardElem.innerHTML += `<h1>Leader Board<h1>`
-       userLeaderBoardArray.data.forEach((userDetails) => {
-         leaderboardElem.innerHTML += `<li> Name -  ${userDetails.name} Total Expense - ${userDetails.total_expense} </li>`;
-       })
-   
-     };
-   }
+    const inputElement = document.createElement('button');
+    inputElement.classList = 'btn leaderboard';
+    inputElement.textContent = 'Show Leaderboard';
+    document.getElementById('leaderboard').appendChild(inputElement);
+
+    inputElement.onclick = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const userLeaderBoardArray = await axios.get('http://localhost:4000/premium/showLeaderboard', {
+                headers: { Authorization: token }
+            });
+
+            const leaderboardElem = document.getElementById('leaderboard');
+            leaderboardElem.innerHTML = '<h1>Leader Board</h1>';
+            
+            // Create the table and table header
+            const tableElem = document.createElement('table');
+            tableElem.innerHTML = '<tr><th>Name</th><th>Total Expense</th></tr>';
+
+            userLeaderBoardArray.data.forEach((userDetails) => {
+                // Create a new row for each user
+                const rowElem = document.createElement('tr');
+                // Add the user's name and total expense as columns in the row
+                rowElem.innerHTML = `<td>${userDetails.name}</td><td>${userDetails.total_expense}</td>`;
+                // Append the row to the table
+                tableElem.appendChild(rowElem);
+            });
+
+            // Append the table to the leaderboard element
+            leaderboardElem.appendChild(tableElem);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+}
+
+
 
    function showPremiumMessage() {
-     document.getElementById("goPremiumBtn").style.visibility = "hidden";
-     document.getElementById("message").innerHTML = "You are a premium user";
-   //  const child = document.getElementById("goPremiumBtn")
-   //   const parent = document.getElementById("message") 
-   //   parent.removeChild(child)
+    const goPremiumBtn = document.getElementById("goPremiumBtn");
+    goPremiumBtn.remove();
+    document.getElementById("message").innerHTML =  `<svg class="logoIcon" height="1em" viewBox="0 0 576 512"><path d="M309 106c11.4-7 19-19.7 19-34c0-22.1-17.9-40-40-40s-40 17.9-40 40c0 14.4 7.6 27 19 34L209.7 220.6c-9.1 18.2-32.7 23.4-48.6 10.7L72 160c5-6.7 8-15 8-24c0-22.1-17.9-40-40-40S0 113.9 0 136s17.9 40 40 40c.2 0 .5 0 .7 0L86.4 427.4c5.5 30.4 32 52.6 63 52.6H426.6c30.9 0 57.4-22.1 63-52.6L535.3 176c.2 0 .5 0 .7 0c22.1 0 40-17.9 40-40s-17.9-40-40-40s-40 17.9-40 40c0 9 3 17.3 8 24l-89.1 71.3c-15.9 12.7-39.5 7.5-48.6-10.7L309 106z"></path></svg>`;
    }
 
    function parseJwt (token) {
@@ -169,13 +183,9 @@ async function saveToDatabase(event) {
               },
               { headers: { Authorization: token } }
             )
-              alert("You are a Premiem User Now");
+              alert("You are a Premiem User Now Please Login Again To Enjoy Premium Features");
 
-              document.getElementById("goPremiumBtn").style.visibility = "hidden";
-              document.getElementById("message").innerHTML = "You are a premium user";
-              console.log("pp user");
-              localStorage.setItem('isadmin', true)
-              showLeaderboard();
+              window.location.href="../login/login.html";
         },
       };
     

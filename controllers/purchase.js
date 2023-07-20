@@ -48,7 +48,7 @@ exports.updateTransactonStatus = async (req, res) => {
           }).catch((err) => {
             throw new Error(err);
           })
-    })
+    });
 
 
   } catch (err) {
