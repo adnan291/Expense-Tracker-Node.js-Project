@@ -10,11 +10,6 @@ const client = Sib.ApiClient.instance;
 const apiKey = client.authentications['api-key'];
 apiKey.apiKey = process.env.BREVO_API_KEY;
 
-const tranEmailApi = new Sib.TransactionalEmailsApi();
-
-const sender = {
-    email: 'adnanmohammad995@gmail.com'
-}
 
 
 
@@ -41,6 +36,11 @@ exports.forgotPassword = async (req, res, next) => {
           } catch (err) {
             console.log(err);
           }
+        }
+        const tranEmailApi = new Sib.TransactionalEmailsApi();
+        
+        const sender = {
+            email: 'adnanmohammad995@gmail.com'
         }
         const receivers = [{ email: email }];
         const resetLink = `http://localhost:4000/password/resetpassword/${id}`;

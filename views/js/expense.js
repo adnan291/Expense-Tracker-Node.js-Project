@@ -28,6 +28,59 @@ async function saveToDatabase(event) {
     
   
     }
+
+    async function fetchFilteredData(timePeriod) {
+      try {
+
+    
+        const token = localStorage.getItem('token');
+        const currentDate = new Date();
+        let startDate, endDate;
+    
+        if (timePeriod === 'daily') {
+          startDate = new Date(currentDate);
+          endDate = new Date(currentDate);
+        } else if (timePeriod === 'weekly') {
+          startDate = new Date(currentDate);
+          startDate.setDate(currentDate.getDate() - 7);
+          endDate = new Date(currentDate);
+        } else if (timePeriod === 'monthly') {
+          startDate = new Date(currentDate);
+          startDate.setDate(1);
+          endDate = new Date(currentDate);
+          endDate.setMonth(currentDate.getMonth() + 1);
+          endDate.setDate(0);
+        }
+    
+        const data = {
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString(),
+        };
+    
+        const res = await axios.post(
+          'http://localhost:4000/expense/get-filtered-expenses',
+          data,
+          { headers: { Authorization: token } }
+        );
+    
+        return res.data;
+      } catch (err) {
+        console.log(err);
+        return [];
+      }
+    }
+    
+    // Function to show filtered expenses and incomes on the screen
+    function showFilteredData(filteredData) {
+      const parentNode = document.getElementById('expenses');
+      parentNode.innerHTML = ''; // Clear the existing content
+    
+      filteredData.forEach((expense) => {
+        showNewExpenseOnScreen(expense);
+      });
+    }
+    
+   
   
     function showNewExpenseOnScreen(expense) {
   
@@ -84,6 +137,53 @@ async function saveToDatabase(event) {
 }
 
 
+function showDMYExpenses() {
+  const dailybtn = document.createElement('button');
+  dailybtn.classList = 'btn btn-primary';
+  dailybtn.id = 'dailyBtn';
+  dailybtn.textContent = 'Daliy';
+  const weeklybtn = document.createElement('button');
+  weeklybtn.classList = 'btn btn-primary';
+  weeklybtn.textContent = 'Weekly'
+  weeklybtn.id = 'weeklyBtn';
+  const monthlybtn = document.createElement('button');
+  monthlybtn.classList = 'btn btn-primary';
+  monthlybtn.textContent = 'Montly';
+  monthlybtn.id = 'monthlyBtn';
+
+  document.getElementById('dmy_expenses').appendChild(dailybtn);
+  document.getElementById('dmy_expenses').appendChild(weeklybtn);
+  document.getElementById('dmy_expenses').appendChild(monthlybtn);
+
+console.log(document.getElementById('dmy_expenses'));
+
+ // Event listener for the filter buttons
+ document.getElementById('dailyBtn').onclick = async function () {
+  const filteredData = await fetchFilteredData('daily');
+  showFilteredData(filteredData);
+};
+
+document.getElementById('weeklyBtn').onclick = async function () {
+  const filteredData = await fetchFilteredData('weekly');
+  showFilteredData(filteredData);
+};
+
+document.getElementById('monthlyBtn').onclick = async function () {
+  const filteredData = await fetchFilteredData('monthly');
+  showFilteredData(filteredData);
+};
+
+
+}
+
+   function showDownloadBtn(){
+    const downloadBtn = document.createElement('button');
+    downloadBtn.classList = 'btn btn-primary';
+    downloadBtn.id = 'downloadBtn';
+    downloadBtn.textContent = 'Download';
+  document.getElementById('downloadbtn').appendChild(downloadBtn);
+
+   }
 
    function showPremiumMessage() {
     const goPremiumBtn = document.getElementById("goPremiumBtn");
@@ -115,6 +215,8 @@ async function saveToDatabase(event) {
       if(ispremiumuser){
         showPremiumMessage();
         showLeaderboard();
+        showDMYExpenses();
+        showDownloadBtn();
     
       }
 

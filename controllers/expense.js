@@ -1,6 +1,7 @@
 const Expense = require('../models/expenses');
 const User = require('../models/users');
 const sequelize = require('../util/database');
+const { Op } = require('sequelize');
 
 exports.getAddExpense = async (req, res, next) => {
     try {
@@ -10,6 +11,27 @@ exports.getAddExpense = async (req, res, next) => {
         console.log(err);
     }
 };
+
+exports.getFilteredExpenses = async (req, res, next) => {
+    const { startDate, endDate } = req.body;
+    const userId = req.user.id;
+  
+    try {
+      const expenses = await Expense.findAll({
+        where: {
+          userId: userId,
+          createdAt: {
+            [Op.gte]: startDate,
+            [Op.lte]: endDate,
+          },
+        },
+      });
+      res.status(200).json(expenses);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ error: 'An error occurred while fetching filtered expenses.' });
+    }
+  };
 
 exports.postAddExpense = async (req, res, next) => {
     const t = await sequelize.transaction(); // Begin a transaction

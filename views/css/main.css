@@ -237,7 +237,7 @@ body {
 }
 
 /* Center the leaderboard table */
-#leaderboard {
+#leaderboard, #dmy_expenses {
   display: flex;
   justify-content: center;
   align-items: center;
