@@ -13,8 +13,12 @@ body {
   
   /* Style the h1 tag */
   h1 {
-    font-size: 35px;
     margin: 0;
+  }
+
+  h2 {
+    text-align: center;
+    margin: 10px;
   }
   
   /* Style the container section */
@@ -199,7 +203,7 @@ body {
     overflow: hidden;
   }
 /* Style the leaderboard table */
-#leaderboard table {
+#leaderboard table, #downloaded table {
   width: 80%;
   margin-bottom: 2rem;
   border-collapse: collapse;
@@ -209,7 +213,7 @@ body {
 }
 
 /* Style the table headers */
-#leaderboard th {
+#leaderboard th,#downloaded th {
   background-color: #00BFA6;
   color: #fff;
   padding: 12px;
@@ -218,26 +222,26 @@ body {
 }
 
 /* Style the table cells */
-#leaderboard td {
+#leaderboard td, #downloaded td {
   text-align: center;
   padding: 10px;
   border-bottom: 1px solid #e0e0e0;
 }
 
 /* Alternate row background color for better readability */
-#leaderboard tr:nth-child(even) {
+#leaderboard tr:nth-child(even), #downloaded tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
 /* Style the leaderboard title */
-#leaderboard h1 {
+#leaderboard h1, #downloaded h1 {
   text-align: center;
   margin-top: 2rem;
   margin-bottom: 20px;
 }
 
 /* Center the leaderboard table */
-#leaderboard, #dmy_expenses {
+#leaderboard, #downloaded {
   display: flex;
   justify-content: center;
   align-items: center;

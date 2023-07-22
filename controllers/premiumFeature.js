@@ -1,6 +1,7 @@
 const User = require("../models/users");
 const Expense = require("../models/expenses");
-const sequelize = require("../util/database");
+const FilesDownloaded = require("../models/filesdownloaded");
+
 
 exports.getUserLeaderBoard = async (req, res) => {
   try {
@@ -18,6 +19,26 @@ exports.getUserLeaderBoard = async (req, res) => {
       
 
       res.status(200).json(leaderboardusers);
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+};
+
+exports.getDownloadedURL = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    console.log(userId);
+    const filesdownloaded = await FilesDownloaded.findAll({
+      where: {
+        userId: userId
+      },
+      order: [['createdAt', 'DESC']]
+      });
+      
+
+      res.status(200).json(filesdownloaded);
 
   } catch (err) {
     console.log(err);

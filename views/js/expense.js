@@ -39,6 +39,7 @@ async function saveToDatabase(event) {
     
         if (timePeriod === 'daily') {
           startDate = new Date(currentDate);
+           startDate.setHours(0, 0, 0, 0);
           endDate = new Date(currentDate);
         } else if (timePeriod === 'weekly') {
           startDate = new Date(currentDate);
@@ -66,17 +67,25 @@ async function saveToDatabase(event) {
         return res.data;
       } catch (err) {
         console.log(err);
-        return [];
       }
     }
     
     // Function to show filtered expenses and incomes on the screen
-    function showFilteredData(filteredData) {
-      const parentNode = document.getElementById('expenses');
-      parentNode.innerHTML = ''; // Clear the existing content
+    function showFilteredData(filteredData, timePeriod) {
+      const parentNode = document.getElementById('dmy_expenses');
+      const heading = document.createElement('h2');
+      heading.textContent = `${timePeriod} Expenses`;
+      parentNode.appendChild(heading);
+
+      const ul = document.createElement('ul');
+      ul.id = timePeriod;
+      ul.classList = 'list-group';
+      parentNode.appendChild(ul);
+
+      console.log(parentNode);
     
       filteredData.forEach((expense) => {
-        showNewExpenseOnScreen(expense);
+        showDMYExpense(expense, ul.id);
       });
     }
     
@@ -98,6 +107,25 @@ async function saveToDatabase(event) {
   
      parentNode.innerHTML = parentNode.innerHTML + childHTML;
    }
+
+    function showDMYExpense(expense, ulid) {
+  
+      document.getElementById('description').value = '';
+     document.getElementById('category').value = '';
+     document.getElementById('expenseAmount').value = '';
+  
+  
+     const parentNode = document.getElementById(ulid);
+     const childHTML = ` <li id=${expense.id}> ${expense.description} - ${expense.expenseAmount}
+     <div class="expense-buttons">
+     <input class="btn btn-outline-danger" onclick=deleteExpense('${expense.id}') value ="Delete" >
+     <input class="btn btn-outline-primary" onclick=editExpenseDetails('${expense.description}','${expense.expenseAmount}','${expense.category}','${expense.id}') value ="Edit"> 
+                                   </div> </li>`;
+  
+     parentNode.innerHTML = parentNode.innerHTML + childHTML;
+   }
+
+
 
    function showLeaderboard() {
     const inputElement = document.createElement('button');
@@ -135,46 +163,87 @@ async function saveToDatabase(event) {
         }
     };
 }
+   function showDownloaded() {
+    const inputElement = document.createElement('button');
+    inputElement.classList = 'btn downloaded';
+    inputElement.textContent = 'Show Downloaded List';
+    document.getElementById('downloaded').appendChild(inputElement);
 
+    inputElement.onclick = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const userDownloadedArray = await axios.get('http://localhost:4000/premium/showDownloaded', {
+                headers: { Authorization: token }
+            });
 
-function showDMYExpenses() {
-  const dailybtn = document.createElement('button');
-  dailybtn.classList = 'btn btn-primary';
-  dailybtn.id = 'dailyBtn';
-  dailybtn.textContent = 'Daliy';
-  const weeklybtn = document.createElement('button');
-  weeklybtn.classList = 'btn btn-primary';
-  weeklybtn.textContent = 'Weekly'
-  weeklybtn.id = 'weeklyBtn';
-  const monthlybtn = document.createElement('button');
-  monthlybtn.classList = 'btn btn-primary';
-  monthlybtn.textContent = 'Montly';
-  monthlybtn.id = 'monthlyBtn';
+            const downloadedElem = document.getElementById('downloaded');
+            downloadedElem.innerHTML = '<h1>Downloaded List</h1>';
+            
+            // Create the table and table header
+            const tableElem = document.createElement('table');
+            tableElem.innerHTML = '<tr><th>No</th><th>URL</th><th>Downloaded At</th></tr>';
 
-  document.getElementById('dmy_expenses').appendChild(dailybtn);
-  document.getElementById('dmy_expenses').appendChild(weeklybtn);
-  document.getElementById('dmy_expenses').appendChild(monthlybtn);
+            let j = 1;
+            userDownloadedArray.data.forEach((urlDetails) => {
+                // Create a new row for each user
+                const rowElem = document.createElement('tr');
+                // Add the user's name and total expense as columns in the row
+                rowElem.innerHTML = `<td>${j}</td><td><a href = "${urlDetails.url}">${urlDetails.url}</a></td><td>${urlDetails.createdAt}</td>`;
+                // Append the row to the table
+                tableElem.appendChild(rowElem);
+                j++;
+            });
 
-console.log(document.getElementById('dmy_expenses'));
-
- // Event listener for the filter buttons
- document.getElementById('dailyBtn').onclick = async function () {
-  const filteredData = await fetchFilteredData('daily');
-  showFilteredData(filteredData);
-};
-
-document.getElementById('weeklyBtn').onclick = async function () {
-  const filteredData = await fetchFilteredData('weekly');
-  showFilteredData(filteredData);
-};
-
-document.getElementById('monthlyBtn').onclick = async function () {
-  const filteredData = await fetchFilteredData('monthly');
-  showFilteredData(filteredData);
-};
-
-
+            // Append the table to the downloaded element
+            downloadedElem.appendChild(tableElem);
+        } catch (err) {
+            console.log(err);
+        }
+    };
 }
+
+
+// function showDMYExpenses() {
+//   const dailybtn = document.createElement('button');
+//   dailybtn.classList = 'btn btn-primary';
+//   dailybtn.id = 'dailyBtn';
+//   dailybtn.textContent = 'Daliy';
+//   const weeklybtn = document.createElement('button');
+//   weeklybtn.classList = 'btn btn-primary';
+//   weeklybtn.textContent = 'Weekly'
+//   weeklybtn.id = 'weeklyBtn';
+//   const monthlybtn = document.createElement('button');
+//   monthlybtn.classList = 'btn btn-primary';
+//   monthlybtn.textContent = 'Montly';
+//   monthlybtn.id = 'monthlyBtn';
+
+//   document.getElementById('dmy_expenses').appendChild(dailybtn);
+//   document.getElementById('dmy_expenses').appendChild(weeklybtn);
+//   document.getElementById('dmy_expenses').appendChild(monthlybtn);
+
+// console.log(document.getElementById('dmy_expenses'));
+
+//  // Event listener for the filter buttons
+//  document.getElementById('dailyBtn').onclick = async function () {
+//   const filteredData = await fetchFilteredData('daily');
+//   console.log(filteredData);
+//   showFilteredData(filteredData);
+// };
+
+// document.getElementById('weeklyBtn').onclick = async function () {
+//   const filteredData = await fetchFilteredData('weekly');
+//   console.log(filteredData);
+//   showFilteredData(filteredData);
+// };
+
+// document.getElementById('monthlyBtn').onclick = async function () {
+//   const filteredData = await fetchFilteredData('monthly');
+//   console.log(filteredData);
+//   showFilteredData(filteredData);
+// };
+
+
+// }
 
    function showDownloadBtn(){
     const downloadBtn = document.createElement('button');
@@ -182,6 +251,22 @@ document.getElementById('monthlyBtn').onclick = async function () {
     downloadBtn.id = 'downloadBtn';
     downloadBtn.textContent = 'Download';
   document.getElementById('downloadbtn').appendChild(downloadBtn);
+
+  document.getElementById('downloadBtn').onclick = async function () {
+    await axios.get('http://localhost:4000/expense/download', {
+      headers: { Authorization: token }
+  }).then((response) => {
+    if (response.status === 200) {
+      console.log(response);
+      var a = document.createElement('a');
+      a.href = response.data.fileURL;
+      a.download = 'myexpense.csv';
+      a.click(); 
+    } else {
+      throw new Error("Something went wrong");
+    }
+  })
+    };
 
    }
 
@@ -215,8 +300,17 @@ document.getElementById('monthlyBtn').onclick = async function () {
       if(ispremiumuser){
         showPremiumMessage();
         showLeaderboard();
-        showDMYExpenses();
         showDownloadBtn();
+        showDownloaded();
+
+        const dailyExpenses = await fetchFilteredData('daily');
+        showFilteredData(dailyExpenses, 'Daily');
+
+        const weeklyExpenses = await fetchFilteredData('weekly');
+        showFilteredData(weeklyExpenses, 'Weekly');
+
+        const monthlyExpenses = await fetchFilteredData('monthly');
+        showFilteredData(monthlyExpenses, 'Monthly');
     
       }
 
