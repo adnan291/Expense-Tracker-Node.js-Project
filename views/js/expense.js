@@ -1,4 +1,7 @@
 const token = localStorage.getItem("token");
+const pagination = document.getElementById("pagination");
+const parentNode = document.getElementById("expenses");
+
 async function saveToDatabase(event) {  
  
     const msg = document.querySelector('.msg');
@@ -17,7 +20,7 @@ async function saveToDatabase(event) {
   
     const res =  await axios.post("http://localhost:4000/expense/add-expense",obj,{headers:{'Authorization':token}});
   
-        showNewExpenseOnScreen(res.data);
+        // showNewExpenseOnScreen(res.data);
   
         msg.innerHTML = 'Expense Added Successfully';
         setTimeout(() => msg.innerHTML = '', 4000);
@@ -79,10 +82,10 @@ async function saveToDatabase(event) {
 
       const ul = document.createElement('ul');
       ul.id = timePeriod;
-      ul.classList = 'list-group';
+      ul.classList = 'list-1';
       parentNode.appendChild(ul);
 
-      console.log(parentNode);
+      // console.log("showFilteredData",parentNode);
     
       filteredData.forEach((expense) => {
         showDMYExpense(expense, ul.id);
@@ -105,6 +108,7 @@ async function saveToDatabase(event) {
      <input class="btn btn-outline-primary" onclick=editExpenseDetails('${expense.description}','${expense.expenseAmount}','${expense.category}','${expense.id}') value ="Edit"> 
                                    </div> </li>`;
   
+  // console.log("showNewExpenseOnScreen",parentNode.parentNode);
      parentNode.innerHTML = parentNode.innerHTML + childHTML;
    }
 
@@ -188,7 +192,7 @@ async function saveToDatabase(event) {
                 // Create a new row for each user
                 const rowElem = document.createElement('tr');
                 // Add the user's name and total expense as columns in the row
-                rowElem.innerHTML = `<td>${j}</td><td><a href = "${urlDetails.url}">${urlDetails.url}</a></td><td>${urlDetails.createdAt}</td>`;
+                rowElem.innerHTML = `<td>${j}</td><td><a href = "${urlDetails.url}">Click Here</a></td><td>${urlDetails.createdAt}</td>`;
                 // Append the row to the table
                 tableElem.appendChild(rowElem);
                 j++;
@@ -202,54 +206,11 @@ async function saveToDatabase(event) {
     };
 }
 
-
-// function showDMYExpenses() {
-//   const dailybtn = document.createElement('button');
-//   dailybtn.classList = 'btn btn-primary';
-//   dailybtn.id = 'dailyBtn';
-//   dailybtn.textContent = 'Daliy';
-//   const weeklybtn = document.createElement('button');
-//   weeklybtn.classList = 'btn btn-primary';
-//   weeklybtn.textContent = 'Weekly'
-//   weeklybtn.id = 'weeklyBtn';
-//   const monthlybtn = document.createElement('button');
-//   monthlybtn.classList = 'btn btn-primary';
-//   monthlybtn.textContent = 'Montly';
-//   monthlybtn.id = 'monthlyBtn';
-
-//   document.getElementById('dmy_expenses').appendChild(dailybtn);
-//   document.getElementById('dmy_expenses').appendChild(weeklybtn);
-//   document.getElementById('dmy_expenses').appendChild(monthlybtn);
-
-// console.log(document.getElementById('dmy_expenses'));
-
-//  // Event listener for the filter buttons
-//  document.getElementById('dailyBtn').onclick = async function () {
-//   const filteredData = await fetchFilteredData('daily');
-//   console.log(filteredData);
-//   showFilteredData(filteredData);
-// };
-
-// document.getElementById('weeklyBtn').onclick = async function () {
-//   const filteredData = await fetchFilteredData('weekly');
-//   console.log(filteredData);
-//   showFilteredData(filteredData);
-// };
-
-// document.getElementById('monthlyBtn').onclick = async function () {
-//   const filteredData = await fetchFilteredData('monthly');
-//   console.log(filteredData);
-//   showFilteredData(filteredData);
-// };
-
-
-// }
-
    function showDownloadBtn(){
     const downloadBtn = document.createElement('button');
     downloadBtn.classList = 'btn btn-primary';
     downloadBtn.id = 'downloadBtn';
-    downloadBtn.textContent = 'Download';
+    downloadBtn.innerHTML = '<svg class="svgIcon" viewBox="0 0 384 512" height="1em" xmlns="http://www.w3.org/2000/svg"><path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>';
   document.getElementById('downloadbtn').appendChild(downloadBtn);
 
   document.getElementById('downloadBtn').onclick = async function () {
@@ -292,7 +253,9 @@ async function saveToDatabase(event) {
 
       const isadmin = localStorage.getItem('isadmin')
       const decodeToken = parseJwt(token)
-    
+      let page=1;
+      getExpense(page);
+
      // console.log('decodeToken-->',decodeToken)
     
       const ispremiumuser = decodeToken.ispremiumuser;
@@ -314,17 +277,59 @@ async function saveToDatabase(event) {
     
       }
 
-     const res = await axios.get("http://localhost:4000/expense/get-expense",{headers:{'Authorization':token}});
-  
-      for(var i=0;i<res.data.length; i++){
-      showNewExpenseOnScreen(res.data[i]);
-      }
     } 
      catch(err){
   
       console.log(err);
     }
-  })
+  });
+
+  async function getExpense(page) {
+    try {
+      const res = await axios.get(`http://localhost:4000/expense/get-expense?page=${page}`,{ headers: { Authorization: token } });
+     // console.log('ress',res)
+      parentNode.innerHTML = "";
+  
+      for (var i = 0; i < res.data.val.length; i++) {
+        showNewExpenseOnScreen(res.data.val[i]);
+      }
+      // console.log(res);
+  
+      showPagination( res.data.currentPage, res.data.hasNextPage, res.data.nextPage, res.data.hasPreviousPage, res.data.previousPage, res.data.lastPage)
+  
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  function showPagination(currentPage,hasNextPage, nextPage, hasPreviousPage,  previousPage, lastPage) {
+
+    // console.log('paination' )
+    pagination.innerHTML = " ";
+  
+    if (hasPreviousPage) {
+      const button2 = document.createElement("button");
+      button2.classList.add("active");
+      button2.innerHTML = previousPage;
+      button2.addEventListener("click", () => getExpense(previousPage));
+      pagination.appendChild(button2);
+    }
+  
+    const button1 = document.createElement("button");
+    button1.classList.add("active");
+    button1.innerHTML = `<h3>${currentPage}<h3>`;
+  
+    button1.addEventListener("click", () => getExpense(currentPage));
+    pagination.appendChild(button1);
+  
+    if (hasNextPage) {
+      const button3 = document.createElement("button");
+     // button3.classList.add("active");
+      button3.innerHTML = nextPage;
+      button3.addEventListener("click", () => getExpense(nextPage));
+      pagination.appendChild(button3);
+    }
+  }
   
   function editExpenseDetails(description,expenseAmount,category,expenseId){
   

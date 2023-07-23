@@ -6,11 +6,6 @@ const { Op } = require('sequelize');
 const S3services = require('../services/S3services');
 const UserServices = require('../services/userservices');
 
-
-
-
-
-
 exports.downloadExpense = async (req, res, next) => {
     try {
       const expenses = await UserServices.getExpenses(req);
@@ -37,10 +32,36 @@ exports.downloadExpense = async (req, res, next) => {
   
 
 exports.getAddExpense = async (req, res, next) => {
-    try {
-        const data = await Expense.findAll({ where: { userId: req.user.id } });
-        res.status(200).json(data);
-    } catch (err) {
+  try {
+    var ITEMS_Per_Page = 4;
+     var page = +req.query.page || 1;
+
+ const data = await Expense.findAll({ where: { userId: req.user.id } });
+
+ var totalItems = await req.user.countExpenses();
+
+
+var val = await req.user.getExpenses({
+  offset: (page - 1) * ITEMS_Per_Page,
+  limit: ITEMS_Per_Page
+});
+
+   console.log('val -->', val)
+   console.log('totalItems-->', totalItems)
+   console.log("next page-->", totalItems > page * ITEMS_Per_Page);
+
+ res.json({
+   val: val,
+   isPremium: req.user.ispremiumuser,
+   currentPage: page,
+   hasNextPage:   totalItems > page * ITEMS_Per_Page  ,
+   nextPage: page + 1,
+   hasPreviousPage: page > 1,
+   previousPage: +page - 1,
+  // lastPage: Math.ceil(totalItems / ITEMS_Per_Page),
+ });
+
+} catch (err) {
         console.log(err);
     }
 };

@@ -18,7 +18,7 @@ body {
 
   h2 {
     text-align: center;
-    margin: 10px;
+    margin: 20px;
   }
   
   /* Style the container section */
@@ -87,9 +87,14 @@ body {
    }
    
   /* Style the unordered lists */
-  ul {
+  ul  {
     list-style: none;
     padding: 0;
+  }
+
+  li {
+    list-style: none;
+    margin-bottom: 30px;
   }
   
   .msg {
@@ -187,15 +192,31 @@ body {
     transform: scale(0.95);
   }
   #message {
-   width: 160px;
-    height: 50px;
+   width: 50px;
+    height: 30px;
     color: #ffffff;
     border: none;
     border-radius: 10px;
-    background-position: left;
-    position: fixed;
+    background-position: right;
+    position: absolute;
     top: 10px;
-    right: 10px;
+    right: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition-duration: 1s;
+    overflow: hidden;
+  }
+  #downloadBtn {
+    width: 80px;
+    height: 50px;
+    color: #ffffff;
+    border: none;
+    border-radius: 70px;
+    background-position: bottom;
+    position: fixed;
+    bottom: 50px;
+    right: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -250,8 +271,8 @@ body {
 }
 /* Add CSS to increase the icon size and change its color */
 .logoIcon {
-  width: 3em;
-  height: 3em;
+  width: 2em;
+  height: 2em;
   fill: gold; /* Change the color to gold */
 }
 

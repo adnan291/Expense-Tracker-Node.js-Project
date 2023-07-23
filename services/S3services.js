@@ -1,13 +1,12 @@
 const AWS = require('aws-sdk');
+require("dotenv").config;
 
 const BUCKET_NAME = 'expensetrackernodejs';
-const IAM_USER_KEY = 'AKIA2CXJOHIQAB2IGUG2';
-const IAM_USER_SECRET = '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';
 
 const uploadToS3 = (data, filename) => {
     let s3bucket = new AWS.S3({
-      accessKeyId: IAM_USER_KEY,
-      secretAccessKey: IAM_USER_SECRET,
+      accessKeyId: process.env.IAM_USER_KEY,
+      secretAccessKey: process.env.IAM_USER_SECRET,
     });
   
     var params = {
