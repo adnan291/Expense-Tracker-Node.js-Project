@@ -275,5 +275,178 @@ body {
   height: 2em;
   fill: gold; /* Change the color to gold */
 }
+/* Add CSS for pagination buttons */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
 
-  
+.pagination button {
+  background-color: #00BFA6;
+  color: #fff;
+  padding: 5px 10px;
+  margin: 0 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.pagination button.active {
+  background-color: #fff;
+  color: #00BFA6;
+  font-weight: bold;
+}
+
+.pagination button:hover {
+  background-color: #87dbd0;
+}
+
+/* Add CSS for the "Rows Per Page" dropdown */
+#selectPerPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+#selectPerPage label {
+  margin-right: 5px;
+}
+
+#selectPerPage select {
+  border: none;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+#selectPerPage select:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+.delete {
+  width: 150px;
+  height: 50px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  background: red;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+  background: #e62222;
+ }
+ 
+ .delete, .delete span {
+  transition: 200ms;
+ }
+ 
+ .delete .text {
+  transform: translateX(35px);
+  color: white;
+  font-weight: bold;
+ }
+ 
+ .delete .icon {
+  position: absolute;
+  border-left: 1px solid #c41b1b;
+  transform: translateX(110px);
+  height: 40px;
+  width: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+ }
+ 
+ .delete svg {
+  width: 15px;
+  fill: #eee;
+ }
+ 
+ .delete:hover {
+  background: #ff3636;
+ }
+ 
+ .delete:hover .text {
+  color: transparent;
+ }
+ 
+ .delete:hover .icon {
+  width: 150px;
+  border-left: none;
+  transform: translateX(0);
+ }
+ 
+ .delete:focus {
+  outline: none;
+ }
+ 
+ .delete:active .icon svg {
+  transform: scale(0.8);
+ }
+
+.edit {
+  width: 150px;
+  height: 50px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  background: blue;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+  background: #2256e6;
+ }
+ 
+ .edit, .edit span {
+  transition: 200ms;
+ }
+ 
+ .edit .text {
+  transform: translateX(35px);
+  color: white;
+  font-weight: bold;
+ }
+ 
+ .edit .icon {
+  position: absolute;
+  border-left: 1px solid #1b64c4;
+  transform: translateX(110px);
+  height: 40px;
+  width: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+ }
+ 
+ .edit svg {
+  width: 15px;
+  fill: #eee;
+ }
+ 
+ .edit:hover {
+  background: #3680ff;
+ }
+ 
+ .edit:hover .text {
+  color: transparent;
+ }
+ 
+ .edit:hover .icon {
+  width: 150px;
+  border-left: none;
+  transform: translateX(0);
+ }
+ 
+ .edit:focus {
+  outline: none;
+ }
+ 
+ .edit:active .icon svg {
+  transform: scale(0.8);
+ }
+ 

@@ -33,12 +33,14 @@ exports.downloadExpense = async (req, res, next) => {
 
 exports.getAddExpense = async (req, res, next) => {
   try {
-    var ITEMS_Per_Page = +req.query.expPerPage || 2;
-     var page = +req.query.page || 1;
+    var totalItems = await req.user.countExpenses();
+
+    var page = +req.query.page || 1;
+    var ITEMS_Per_Page = +req.query.expPerPage;
+    console.log("ITEMS_Per_Page ", ITEMS_Per_Page);
 
  const data = await Expense.findAll({ where: { userId: req.user.id } });
 
- var totalItems = await req.user.countExpenses();
 
 
 var val = await req.user.getExpenses({
