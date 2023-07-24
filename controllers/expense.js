@@ -33,7 +33,7 @@ exports.downloadExpense = async (req, res, next) => {
 
 exports.getAddExpense = async (req, res, next) => {
   try {
-    var ITEMS_Per_Page = 4;
+    var ITEMS_Per_Page = +req.query.expPerPage || 2;
      var page = +req.query.page || 1;
 
  const data = await Expense.findAll({ where: { userId: req.user.id } });
@@ -46,10 +46,6 @@ var val = await req.user.getExpenses({
   limit: ITEMS_Per_Page
 });
 
-   console.log('val -->', val)
-   console.log('totalItems-->', totalItems)
-   console.log("next page-->", totalItems > page * ITEMS_Per_Page);
-
  res.json({
    val: val,
    isPremium: req.user.ispremiumuser,
@@ -58,7 +54,7 @@ var val = await req.user.getExpenses({
    nextPage: page + 1,
    hasPreviousPage: page > 1,
    previousPage: +page - 1,
-  // lastPage: Math.ceil(totalItems / ITEMS_Per_Page),
+  lastPage: Math.ceil(totalItems / ITEMS_Per_Page),
  });
 
 } catch (err) {

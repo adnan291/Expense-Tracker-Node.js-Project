@@ -2,6 +2,7 @@ const token = localStorage.getItem("token");
 const pagination = document.getElementById("pagination");
 const parentNode = document.getElementById("expenses");
 
+
 async function saveToDatabase(event) {  
  
     const msg = document.querySelector('.msg');
@@ -20,8 +21,7 @@ async function saveToDatabase(event) {
   
     const res =  await axios.post("http://localhost:4000/expense/add-expense",obj,{headers:{'Authorization':token}});
   
-        // showNewExpenseOnScreen(res.data);
-  
+       showNewExpenseOnScreen(res.data);
         msg.innerHTML = 'Expense Added Successfully';
         setTimeout(() => msg.innerHTML = '', 4000);
     
@@ -82,7 +82,7 @@ async function saveToDatabase(event) {
 
       const ul = document.createElement('ul');
       ul.id = timePeriod;
-      ul.classList = 'list-1';
+      ul.classList = 'list1';
       parentNode.appendChild(ul);
 
       // console.log("showFilteredData",parentNode);
@@ -237,6 +237,7 @@ async function saveToDatabase(event) {
     document.getElementById("message").innerHTML =  `<svg class="logoIcon" height="1em" viewBox="0 0 576 512"><path d="M309 106c11.4-7 19-19.7 19-34c0-22.1-17.9-40-40-40s-40 17.9-40 40c0 14.4 7.6 27 19 34L209.7 220.6c-9.1 18.2-32.7 23.4-48.6 10.7L72 160c5-6.7 8-15 8-24c0-22.1-17.9-40-40-40S0 113.9 0 136s17.9 40 40 40c.2 0 .5 0 .7 0L86.4 427.4c5.5 30.4 32 52.6 63 52.6H426.6c30.9 0 57.4-22.1 63-52.6L535.3 176c.2 0 .5 0 .7 0c22.1 0 40-17.9 40-40s-17.9-40-40-40s-40 17.9-40 40c0 9 3 17.3 8 24l-89.1 71.3c-15.9 12.7-39.5 7.5-48.6-10.7L309 106z"></path></svg>`;
    }
 
+
    function parseJwt (token) {
        var base64Url = token.split('.')[1];
        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -253,13 +254,17 @@ async function saveToDatabase(event) {
 
       const isadmin = localStorage.getItem('isadmin')
       const decodeToken = parseJwt(token)
-      let page=1;
-      getExpense(page);
 
-     // console.log('decodeToken-->',decodeToken)
+      let page = 1;
+      let rowValue = localStorage.getItem("expPerPage");
+      let expPerPage = rowValue;
+
+       getExpense(page, expPerPage);
+
+
     
       const ispremiumuser = decodeToken.ispremiumuser;
-      // console.log(ispremiumuser);
+
       if(ispremiumuser){
         showPremiumMessage();
         showLeaderboard();
@@ -284,17 +289,17 @@ async function saveToDatabase(event) {
     }
   });
 
-  async function getExpense(page) {
+  async function getExpense(page, expPerPage) {
     try {
-      const res = await axios.get(`http://localhost:4000/expense/get-expense?page=${page}`,{ headers: { Authorization: token } });
-     // console.log('ress',res)
+      const res = await axios.get(`http://localhost:4000/expense/get-expense?page=${page}&expPerPage=${expPerPage}`,{ headers: { Authorization: token } });
+
       parentNode.innerHTML = "";
   
       for (var i = 0; i < res.data.val.length; i++) {
         showNewExpenseOnScreen(res.data.val[i]);
       }
-      // console.log(res);
-  
+
+
       showPagination( res.data.currentPage, res.data.hasNextPage, res.data.nextPage, res.data.hasPreviousPage, res.data.previousPage, res.data.lastPage)
   
     } catch (err) {
@@ -304,7 +309,6 @@ async function saveToDatabase(event) {
 
   function showPagination(currentPage,hasNextPage, nextPage, hasPreviousPage,  previousPage, lastPage) {
 
-    // console.log('paination' )
     pagination.innerHTML = " ";
   
     if (hasPreviousPage) {
@@ -329,7 +333,27 @@ async function saveToDatabase(event) {
       button3.addEventListener("click", () => getExpense(nextPage));
       pagination.appendChild(button3);
     }
+
+    const selectPerPage = document.getElementById("selectPerPage");
+      selectPerPage.innerHTML =  `<div id="pagelist">
+      <label for="price">Rows Per Page</label>
+      <select name="price" id="price" onchange="rowChange(event)">
+        <option value='0'>0</option>
+        <option value='2'>2</option>
+        <option value='4'>4</option>
+        <option value='6'>6</option>
+      </select>
+    </div>`
+
   }
+
+  function rowChange(event) {
+    event.preventDefault()
+
+   const rowValue = Number(event.target.value);
+   localStorage.setItem("expPerPage", rowValue);
+   location.reload();
+ }
   
   function editExpenseDetails(description,expenseAmount,category,expenseId){
   
