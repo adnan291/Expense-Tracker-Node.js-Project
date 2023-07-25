@@ -36,7 +36,7 @@ exports.getAddExpense = async (req, res, next) => {
     var totalItems = await req.user.countExpenses();
 
     var page = +req.query.page || 1;
-    var ITEMS_Per_Page = +req.query.expPerPage;
+    var ITEMS_Per_Page = +req.query.expPerPage || 2;
     console.log("ITEMS_Per_Page ", ITEMS_Per_Page);
 
  const data = await Expense.findAll({ where: { userId: req.user.id } });
