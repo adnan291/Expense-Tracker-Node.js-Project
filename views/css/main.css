@@ -208,11 +208,6 @@ body {
     overflow: hidden;
   }
   #downloadBtn {
-    width: 80px;
-    height: 50px;
-    color: #ffffff;
-    border: none;
-    border-radius: 70px;
     background-position: bottom;
     position: fixed;
     bottom: 50px;
@@ -221,7 +216,6 @@ body {
     align-items: center;
     justify-content: center;
     transition-duration: 1s;
-    overflow: hidden;
   }
 /* Style the leaderboard table */
 #leaderboard table, #downloaded table {
