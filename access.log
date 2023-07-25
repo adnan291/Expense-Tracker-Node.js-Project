@@ -1,0 +1,5 @@
+::1 - - [25/Jul/2023:05:57:34 +0000] "POST /expense/get-filtered-expenses HTTP/1.1" 200 162 "-" "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Mobile Safari/537.36"
+::1 - - [25/Jul/2023:05:57:34 +0000] "GET /expense/get-expense?page=1&expPerPage=6 HTTP/1.1" 304 - "-" "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Mobile Safari/537.36"
+::1 - - [25/Jul/2023:05:57:34 +0000] "POST /expense/get-filtered-expenses HTTP/1.1" 200 488 "-" "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Mobile Safari/537.36"
+::1 - - [25/Jul/2023:05:57:34 +0000] "POST /expense/get-filtered-expenses HTTP/1.1" 200 488 "-" "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Mobile Safari/537.36"
+::1 - - [25/Jul/2023:05:57:35 +0000] "POST /expense/get-filtered-expenses HTTP/1.1" 200 488 "-" "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Mobile Safari/537.36"
