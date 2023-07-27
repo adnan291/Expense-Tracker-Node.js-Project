@@ -20,7 +20,7 @@ async function saveToDatabase(event) {
         category
       }
   
-    const res =  await axios.post("http://localhost:4000/expense/add-expense",obj,{headers:{'Authorization':token}});
+    const res =  await axios.post("http://65.0.182.13:4000/expense/add-expense",obj,{headers:{'Authorization':token}});
   
        showNewExpenseOnScreen(res.data);
         msg.innerHTML = 'Expense Added Successfully';
@@ -70,7 +70,7 @@ async function saveToDatabase(event) {
         };
     
         const res = await axios.post(
-          'http://localhost:4000/expense/get-filtered-expenses',
+          'http://65.0.182.13:4000/expense/get-filtered-expenses',
           data,
           { headers: { Authorization: token } }
         );
@@ -152,7 +152,7 @@ async function saveToDatabase(event) {
     inputElement.onclick = async () => {
         try {
             const token = localStorage.getItem('token');
-            const userLeaderBoardArray = await axios.get('http://localhost:4000/premium/showLeaderboard', {
+            const userLeaderBoardArray = await axios.get('http://65.0.182.13:4000/premium/showLeaderboard', {
                 headers: { Authorization: token }
             });
 
@@ -188,7 +188,7 @@ async function saveToDatabase(event) {
     inputElement.onclick = async () => {
         try {
             const token = localStorage.getItem('token');
-            const userDownloadedArray = await axios.get('http://localhost:4000/premium/showDownloaded', {
+            const userDownloadedArray = await axios.get('http://65.0.182.13:4000/premium/showDownloaded', {
                 headers: { Authorization: token }
             });
 
@@ -226,7 +226,7 @@ async function saveToDatabase(event) {
   document.getElementById('downloadbtn').appendChild(downloadBtn);
 
   document.getElementById('downloadBtn').onclick = async function () {
-    await axios.get('http://localhost:4000/expense/download', {
+    await axios.get('http://65.0.182.13:4000/expense/download', {
       headers: { Authorization: token }
   }).then((response) => {
     if (response.status === 200) {
@@ -306,7 +306,7 @@ async function saveToDatabase(event) {
     try {
       // console.log("expPerPage",expPerPage);
       // console.log("page",page);
-      const res = await axios.get(`http://localhost:4000/expense/get-expense?page=${page}&expPerPage=${expPerPage}`,{ headers: { Authorization: token } });
+      const res = await axios.get(`http://65.0.182.13:4000/expense/get-expense?page=${page}&expPerPage=${expPerPage}`,{ headers: { Authorization: token } });
 
       parentNode.innerHTML = "";
   
@@ -384,7 +384,7 @@ async function saveToDatabase(event) {
   
   async function deleteExpense(expenseId) {
     try{
-         await axios.delete(`http://localhost:4000/expense/delete-expense/${expenseId}`,{headers:{'Authorization':token}});
+         await axios.delete(`http://65.0.182.13:4000/expense/delete-expense/${expenseId}`,{headers:{'Authorization':token}});
   
           removeExpenseFromScreen(expenseId);
   
@@ -405,7 +405,7 @@ async function saveToDatabase(event) {
     }
 
     document.getElementById("goPremiumBtn").onclick = async function(e) {
-      response = await axios.get('http://localhost:4000/purchase/premiumMembership', {headers:{'Authorization':token}})
+      response = await axios.get('http://65.0.182.13:4000/purchase/premiumMembership', {headers:{'Authorization':token}})
       console.log(response)
       var options = {
         "key": response.data.key_id, // Enter the key id generated from dashboard
@@ -418,7 +418,7 @@ async function saveToDatabase(event) {
     
         "handler": 
         async function (response) { 
-          await axios.post("http://localhost:4000/purchase/updateTransactonStatus",{
+          await axios.post("http://65.0.182.13:4000/purchase/updateTransactonStatus",{
                 order_id: options.order_id,
                 payment_id: response.razorpay_payment_id,
               },

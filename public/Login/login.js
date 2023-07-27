@@ -11,12 +11,12 @@ async function login(event) {
       password
     }
 
-    const res = await axios.post("http://localhost:4000/user/login", obj);
+    const res = await axios.post("http://65.0.182.13:4000/user/login", obj);
     
     if (res.status == 200) {
       window.alert("User Logged In Successfully");
       localStorage.setItem("token", res.data.token);
-      (window.location.href="./expense.html"); 
+      (window.location.href="../Expense/expense.html"); 
     }
 
     event.target.email.value = '';

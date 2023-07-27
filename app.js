@@ -10,7 +10,6 @@ const path = require('path');
 const dotenv = require("dotenv");
 dotenv.config();
 
-
 const buyPremium = require('./routes/purchase');
 const premiumRoutes = require('./routes/premiumFeature')
 const userRoutes = require('./routes/user');
@@ -28,7 +27,6 @@ app.use(compression());
 app.use(morgan('combined', {stream : accessLogSystem}))
 
 const sequelize = require('./util/database');
-
 const User = require('./models/users');
 const Expense = require('./models/expenses');
 const Order = require('./models/orders')
@@ -40,6 +38,11 @@ app.use('/password',forgotpassRoutes);
 app.use('/expense', expenseRoutes);
 app.use("/purchase", buyPremium);
 app.use("/premium", premiumRoutes);
+
+app.use((req, res) => {
+    console.log('url-->',  req.originalUrl)
+    res.sendFile(path.join(__dirname, `public/${req.url}`));
+  });
 
 User.hasMany(Expense);
 Expense.belongsTo(User);
@@ -53,16 +56,13 @@ Forgotpassword.belongsTo(User);
 User.hasMany(FilesDownloaded);
 FilesDownloaded.belongsTo(User); 
 
-const port = process.env.PORT_NUMBER;
+// const port = process.env.PORT_NUMBER;
 
 sequelize.sync().then((result) => {
-    app.listen(port || 3000, () => {
-        console.log("The app is running on port http://127.0.0.1:" + port);
-        });
+    app.listen(4000);
 }).catch((err) => {
     console.log(err);
 });
-
 
 app.use((req, res, next) => {
     res.status(404).send('<h1>Page Not Found</h1>')

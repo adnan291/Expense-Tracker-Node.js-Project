@@ -43,7 +43,7 @@ exports.forgotPassword = async (req, res, next) => {
             email: 'adnanmohammad995@gmail.com'
         }
         const receivers = [{ email: email }];
-        const resetLink = `http://localhost:4000/password/resetpassword/${id}`;
+        const resetLink = `http://65.0.182.13:4000/password/resetpassword/${id}`;
         const htmlContent = `
         <html>
           <body style="font-family: Arial, sans-serif; line-height: 1.6;">

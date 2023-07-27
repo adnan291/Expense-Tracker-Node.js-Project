@@ -13,7 +13,7 @@ async function signup(event) {
         password
       }
   
-      const res = await axios.post("http://localhost:4000/user/signup", obj);
+      const res = await axios.post("http://65.0.182.13:4000/user/signup", obj);
 
       if(res.data.alreadyexisting == true){
         msg.innerHTML = '<h4>User Already Exist<h4>';
@@ -31,7 +31,7 @@ async function signup(event) {
         event.target.password.value = '';
         setTimeout(() => {
           msg.innerHTML = '';
-        }, 2000).then(window.location.href="./login.html"); 
+        }, 2000).then(window.location.href="../login/login.html"); 
         
       }
   
